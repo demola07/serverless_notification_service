@@ -1,9 +1,7 @@
-service:
-  name: notification-service
+service: notification-service
 
 plugins:
   - serverless-bundle
-  - serverless-pseudo-parameters
 
 provider:
   name: aws
@@ -11,14 +9,16 @@ provider:
   memorySize: 256
   region: eu-west-1
   stage: ${opt:stage, 'dev'}
+  iamRoleStatements:
+    - ${file(iam/SendMailIAM.yaml):SendMailIAM}
 
 functions:
-  hello:
-    handler: src/handlers/hello.handler
-    events:
-      - http:
-          method: GET
-          path: /hello
+  sendMail:
+    handler: src/handlers/sendMail.handler
+    # events:
+    #   - http:
+    #       method: GET
+    #       path: /hello
 
 custom:
   bundle:

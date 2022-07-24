@@ -15,11 +15,18 @@ provider:
 functions:
   sendMail:
     handler: src/handlers/sendMail.handler
-    # events:
-    #   - http:
-    #       method: GET
-    #       path: /hello
+    events:
+      - sqs:
+          arn: ${self:custom.mailQueue.arn}
+          batchSize: 1
+
+resources:
+  Resources:
+    MailQueue: ${file(resources/MailQueue.yaml):MailQueue}
 
 custom:
+  mailQueue:
+    name: MailQueue-${self:provider.stage}
+    arn: !GetAtt MailQueue.Arn
   bundle:
     linting: false

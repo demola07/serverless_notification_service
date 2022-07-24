@@ -23,10 +23,14 @@ functions:
 resources:
   Resources:
     MailQueue: ${file(resources/MailQueue.yaml):MailQueue}
+  Outputs:
+    MailQueueArn: ${file(resources/MailQueue.yaml):Outputs.MailQueueArn}
+    MailQueueUrl: ${file(resources/MailQueue.yaml):Outputs.MailQueueUrl}
 
 custom:
   mailQueue:
     name: MailQueue-${self:provider.stage}
     arn: !GetAtt MailQueue.Arn
+    url: !Ref MailQueue
   bundle:
     linting: false
